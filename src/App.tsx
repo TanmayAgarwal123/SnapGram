@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
+import { Home } from './_root/pages';
 import SigninForm from './_auth/forms/SigninForm';
 import SignUpForm from './_auth/forms/SignupForm';
-import { Home } from './_root/pages';
-import './globals.css';
 import AuthLayout from './_auth/AuthLayout';
 import RootLayout from './_root/RootLayout';
+import './globals.css';
 
 const App = () => {
   return (
