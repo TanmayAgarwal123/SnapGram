@@ -12,6 +12,8 @@
 7) npm install -D tailwindcss-animate
 8) npm install react-router-dom
 9) npm i -D @types/node
+10) npx shadcn-ui@latest init
+11) 
 
 
 # React + TypeScript + Vite
