@@ -11,6 +11,7 @@
 6) ![Alt text](image.png)
 7) npm install -D tailwindcss-animate
 8) npm install react-router-dom
+9) npm i -D @types/node
 
 
 # React + TypeScript + Vite
