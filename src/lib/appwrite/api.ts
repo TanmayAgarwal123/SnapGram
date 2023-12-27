@@ -1,4 +1,4 @@
-import { Avatars, ID } from 'appwrite';
+import { ID } from 'appwrite';
 import { INewUser } from "@/types/intex";
 import { account, appwriteConfig, avatars, databases } from './config';
 
@@ -44,6 +44,21 @@ export async function saveUserToDB(user: {
             user,
         )
         return newUser;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function signInAccount(user: {
+    email:string;
+    password:string;
+}){
+    try {
+        const session = await account.createEmailSession(
+            user.email,
+            user.password,
+        );
+        return session;
     } catch (error) {
         console.log(error);
     }
