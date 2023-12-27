@@ -26,6 +26,10 @@ const SignUpForm = () => {
       password: "",
     },
   })
+
+  const { mutateAsync : createUserAccount,
+    isLoading: isCreatingAccount } = 
+    useCreateUserAccountMutation();
  
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
