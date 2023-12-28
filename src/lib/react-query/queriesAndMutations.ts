@@ -9,7 +9,8 @@ import { INewUser } from '@/types/intex'
 
 export const useCreateUserAccount = () => {
     return useMutation({
-        mutationFn: (user: INewUser) => createUserAccount(user),})
+        mutationFn: (user: INewUser) => createUserAccount(user),
+    });
 }
 
 export const useSignInAccount = () => {

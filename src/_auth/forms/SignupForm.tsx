@@ -17,6 +17,8 @@ const SignUpForm = () => {
 
   const {mutateAsync: createUserAccount, isLoading: isCreatingUser} = useCreateUserAccount();
 
+  
+
    // 1. Define your form.
    const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
