@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form"
 import { SignupValidation } from "@/lib/validation"
 import { z } from "zod"
 import Loader from "@/components/shared/Loader"
-import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations"
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 
 
 
@@ -17,7 +17,7 @@ const SignUpForm = () => {
 
   const {mutateAsync: createUserAccount, isLoading: isCreatingUser} = useCreateUserAccount();
 
-  
+  const {mutateAsync: signInAccount, isLoading: isSigningIn} = useSignInAccount();
 
    // 1. Define your form.
    const form = useForm<z.infer<typeof SignupValidation>>({
@@ -35,9 +35,17 @@ const SignUpForm = () => {
     // create the user
     const newUser = await createUserAccount(values);
     if(!newUser) {
-      return toast({title: "Sign up failed"})
+      return toast({title: "Sign up failed. PLease try again later"})
     }
-    //const session = await signInAccount();
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password,
+    });
+    if(!session) {
+      return toast({title: "Sign in failed. PLease try again later"})
+    }
+
+    
   }
 
   return (
