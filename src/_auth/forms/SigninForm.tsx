@@ -33,23 +33,25 @@ const SigninForm = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
-    const session = await signInAccount({
-      email: values.email,
-      password: values.password,
-    })
-    
-    if(!session){
-      return toast({title: 'Sign in Failed. Please try again.',})
-    }
+    try {
+      await signInAccount({
+        email: values.email,
+        password: values.password,
+      });
 
-    const isLoggedIn = await checkAuthUser();
+      const isLoggedIn = await checkAuthUser();
 
-    if(isLoggedIn){
-      form.reset();
-
-      navigate('/');
-    } else {
-      return toast({title: 'Sign in Failed. Please try again.',})
+      if (isLoggedIn) {
+        form.reset();
+        navigate("/");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Sign in failed. Please try again.",
+        });
+      }
+    } catch {
+      // The global mutation handler already surfaces the specific error.
     }
   }
 

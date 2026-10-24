@@ -11,7 +11,7 @@ describe("cn", () => {
   });
 
   it("ignores falsy values", () => {
-    expect(cn("a", false && "b", null, undefined, "c")).toBe("a c");
+    expect(cn("a", false, null, undefined, "", "c")).toBe("a c");
   });
 });
 

@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
 //import { Textarea, Input, Button } from "@/components/ui";
 //import { ProfileUploader, Loader } from "@/components/shared";
 
@@ -26,7 +25,6 @@ import { Button } from "@/components/ui/button";
 //import { useGetUserById, useUpdateUser } from "@/lib/react-query/queries";
 
 const UpdateProfile = () => {
-  const { toast } = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
   const { user, setUser } = useUserContext();
@@ -55,28 +53,26 @@ const UpdateProfile = () => {
 
   // Handler
   const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
-    const updatedUser = await updateUser({
-      userId: currentUser.$id,
-      name: value.name,
-      bio: value.bio,
-      file: value.file,
-      imageUrl: currentUser.imageUrl,
-      imageId: currentUser.imageId ?? "",
-    });
-
-    if (!updatedUser) {
-      toast({
-        title: `Update user failed. Please try again.`,
+    try {
+      const updatedUser = await updateUser({
+        userId: currentUser.$id,
+        name: value.name,
+        bio: value.bio,
+        file: value.file,
+        imageUrl: currentUser.imageUrl,
+        imageId: currentUser.imageId ?? "",
       });
-    }
 
-    setUser({
-      ...user,
-      name: updatedUser?.name,
-      bio: updatedUser?.bio,
-      imageUrl: updatedUser?.imageUrl,
-    });
-    return navigate(`/profile/${id}`);
+      setUser({
+        ...user,
+        name: updatedUser.name,
+        bio: updatedUser.bio ?? "",
+        imageUrl: updatedUser.imageUrl,
+      });
+      navigate(`/profile/${id}`);
+    } catch {
+      // The global mutation handler already surfaces the specific error.
+    }
   };
 
   return (

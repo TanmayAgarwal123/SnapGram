@@ -25,6 +25,9 @@ module.exports = {
         'secondary-500': '#FFB620',
         'off-white': '#D0DFFF',
         'red': '#FF5A5A',
+        // Semantic colors used by the shadcn toast's destructive variant.
+        'destructive': '#E53E3E',
+        'destructive-foreground': '#FFFFFF',
         'dark-1': '#000000',
         'dark-2': '#09090A',
         'dark-3': '#101012',

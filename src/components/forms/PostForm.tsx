@@ -12,7 +12,6 @@ import { PostValidation } from "@/lib/validation"
 import { IPostDocument } from "@/types"
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
-import { useToast } from "../ui/use-toast"
 
 type PostFormProps = {
     post?: IPostDocument;
@@ -24,7 +23,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
     const { mutateAsync:updatePost, isPending: isLoadingUpdate } = useUpdatePost();
 
     const { user } = useUserContext();
-    const { toast } = useToast();
     const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof PostValidation>>({
@@ -39,31 +37,26 @@ const PostForm = ({ post, action }: PostFormProps) => {
  
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PostValidation>) {
-    if(post && action ==='update'){
-      const updatedPost = await updatePost({
-        ...values,
-        postId: post.$id,
-        imageId: post?.imageId,
-        imageUrl: post?.imageUrl,
-      })
-      if(!updatedPost){
-        toast({title: 'Please try again'})
+    try {
+      if (post && action === "update") {
+        await updatePost({
+          ...values,
+          postId: post.$id,
+          imageId: post?.imageId,
+          imageUrl: post?.imageUrl,
+        });
+        return navigate(`/posts/${post.$id}`);
       }
-      return navigate(`/posts/${post.$id}`)
-    }
-    
-    const newPost = await createPost({
+
+      await createPost({
         ...values,
         userId: user.id,
-        })
-
-        if (!newPost){
-            toast({
-                title: 'Please try again'
-            })
-        }
-        navigate('/');
+      });
+      navigate("/");
+    } catch {
+      // The global mutation handler already surfaces the specific error.
     }
+  }
 
     //console.log(post?.imageUrl)
   return (
