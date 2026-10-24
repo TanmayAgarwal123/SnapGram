@@ -17,6 +17,9 @@ dist-ssr
 .env.*
 !.env.example
 
+# taste-skill working artifacts (screenshots, dealt directions)
+.taste-skill
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
