@@ -60,11 +60,13 @@ import {
       queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
       queryFn: getInfinitePosts,
       getNextPageParam: (lastPage) => {
-        if (lastPage && lastPage.documents.length === 0) return null;
-        const lastId = lastPage?.documents[lastPage?.documents.length - 1].$id;
-        return lastId ? parseInt(lastId) : null;
+        // No more pages once a page comes back empty.
+        if (!lastPage || lastPage.documents.length === 0) return null;
+        // Appwrite cursors are the document's $id (an alphanumeric string),
+        // so return it as-is rather than parseInt (which loses the id).
+        return lastPage.documents[lastPage.documents.length - 1].$id;
       },
-      initialPageParam: 0, // Add this line
+      initialPageParam: "",
     });
   };
   

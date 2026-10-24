@@ -1,22 +1,25 @@
 import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations";
-import { Models } from "appwrite";
+import { IPostDocument } from "@/types";
 
 //import { GridPostList, Loader } from "@/components/shared";
 
 const Saved = () => {
   const { data: currentUser } = useGetCurrentUser();
 
-  const saved = currentUser?.save
-    .map((savePost: Models.Document) => ({
+  // The saved relationship nests save -> post; Appwrite doesn't always populate
+  // the post's own creator two levels deep, so we backfill it with the current
+  // user for display. The cast bridges that partial creator to IPostDocument.
+  const savedPosts = (currentUser?.save
+    ?.map((savePost) => ({
       ...savePost.post,
       creator: {
         imageUrl: currentUser.imageUrl,
         name: currentUser.name,
       },
     }))
-    .reverse();
+    .reverse() ?? []) as unknown as IPostDocument[];
 
   return (
     <div className="saved-container">
@@ -35,10 +38,10 @@ const Saved = () => {
         <Loader />
       ) : (
         <ul className="w-full flex justify-center max-w-5xl gap-9">
-          {saved.length === 0 ? (
+          {savedPosts.length === 0 ? (
             <p className="text-light-4">No available posts</p>
           ) : (
-            <GridPostList posts={saved} showStats={false} />
+            <GridPostList posts={savedPosts} showStats={false} />
           )}
         </ul>
       )}

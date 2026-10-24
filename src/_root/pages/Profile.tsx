@@ -65,7 +65,7 @@ const Profile = () => {
             </div>
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
-              <StatBlock value={currentUser.posts.length} label="Posts" />
+              <StatBlock value={currentUser.posts?.length ?? 0} label="Posts" />
               <StatBlock value={100} label="Followers" />
               <StatBlock value={10} label="Following" />
             </div>
@@ -136,7 +136,9 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          element={
+            <GridPostList posts={currentUser.posts ?? []} showUser={false} />
+          }
         />
         {currentUser.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />

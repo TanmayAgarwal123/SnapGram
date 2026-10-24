@@ -32,10 +32,10 @@ const LikedPosts = () => {
         <Loader />
       ) : (
         <ul className="w-full flex justify-center max-w-5xl gap-9">
-          {currentUser.liked.length === 0 ? (
+          {(currentUser.liked?.length ?? 0) === 0 ? (
             <p className="text-light-4">No liked posts</p>
           ) : (
-              <GridPostList posts={currentUser.liked} showStats={false} />
+              <GridPostList posts={currentUser.liked ?? []} showStats={false} />
           )}
         </ul>
       )}

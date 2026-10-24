@@ -1,0 +1,25 @@
+# Netlify configuration for SnapGram (Vite + React SPA)
+# Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 requires Node >= 20.19 or >= 22.12
+  NODE_VERSION = "22"
+
+# Single-page-app fallback: let React Router handle client-side routes so a
+# hard refresh / deep link (e.g. /sign-in, /profile/123) serves index.html
+# instead of a 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Long-cache the fingerprinted build assets; Vite hashes their filenames so
+# this is safe and makes repeat visits fast.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

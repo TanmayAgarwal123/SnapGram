@@ -9,13 +9,13 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import FileUploader from "../shared/FileUploader"
 import { PostValidation } from "@/lib/validation"
-import { Models } from "appwrite"
+import { IPostDocument } from "@/types"
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
 import { useToast } from "../ui/use-toast"
 
 type PostFormProps = {
-    post?: Models.Document;
+    post?: IPostDocument;
     action: 'create' | 'update';
 }
 
@@ -91,7 +91,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
               <FormControl>
                 <FileUploader
                     fieldChange={field.onChange}
-                    mediaUrl={post?.imageUrl}
+                    mediaUrl={post?.imageUrl ?? ""}
                 />
                 
               </FormControl>

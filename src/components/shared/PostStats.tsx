@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDeleteSavedPost, useGetCurrentUser, useLikePost, useSavePost } from "@/lib/react-query/queriesAndMutations";
-import { Models } from "appwrite";
+import { IPostDocument, ISaveDocument, IUserDocument } from "@/types";
 import { checkIsLiked } from "@/lib/utils";
 import Loader from "./Loader";
 
 type PostStatsProps = {
-    post?: Models.Document,
+    post?: IPostDocument,
     userId: string;
 }
 
 const PostStats = ({post, userId}: PostStatsProps) => {
-    const likesList = post?.likes.map((user: Models.Document) => user.$id);
+    const likesList = post?.likes.map((user: IUserDocument) => user.$id) ?? [];
 
     const [likes, setLikes] = useState(likesList);
     const [isSaved, setIsSaved] = useState(false);
@@ -38,7 +38,7 @@ const PostStats = ({post, userId}: PostStatsProps) => {
         likePost({ postId: post?.$id || '', likesArray: newLikes });
     }
 
-    const savedPostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post?.$id);
+    const savedPostRecord = currentUser?.save?.find((record: ISaveDocument) => record.post.$id === post?.$id);
 
     useEffect(() => {
         setIsSaved(!!savedPostRecord)
