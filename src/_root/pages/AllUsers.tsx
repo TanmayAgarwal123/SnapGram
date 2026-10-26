@@ -1,19 +1,22 @@
 import Loader from "@/components/shared/Loader";
 import UserCard from "@/components/shared/UserCard";
-import { useToast } from "@/components/ui/use-toast";
 //import { Loader, UserCard } from "@/components/shared";
 
 import { useGetUsers } from "@/lib/react-query/queriesAndMutations";
 
 const AllUsers = () => {
-  const { toast } = useToast();
-
   const { data: creators, isLoading, isError: isErrorCreators } = useGetUsers();
 
+  // The global React Query handler already toasts the error; just show a
+  // recoverable message here (and never return undefined from a component).
   if (isErrorCreators) {
-    toast({ title: "Something went wrong." });
-    
-    return;
+    return (
+      <div className="common-container">
+        <p className="body-medium text-light-3">
+          Couldn't load people right now. Please try again.
+        </p>
+      </div>
+    );
   }
 
   return (

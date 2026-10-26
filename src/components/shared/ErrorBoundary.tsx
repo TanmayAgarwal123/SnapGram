@@ -6,6 +6,8 @@ type ErrorBoundaryProps = {
 
 type ErrorBoundaryState = {
   hasError: boolean;
+  error: Error | null;
+  componentStack: string | null;
 };
 
 /**
@@ -13,19 +15,24 @@ type ErrorBoundaryState = {
  * fallback instead of a blank white screen.
  */
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  override state: ErrorBoundaryState = { hasError: false };
+  override state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+    componentStack: null,
+  };
 
-  static getDerivedStateFromError(): ErrorBoundaryState {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error, componentStack: null };
   }
 
   override componentDidCatch(error: Error, info: ErrorInfo) {
     // In production this is where you'd report to Sentry/LogRocket/etc.
     console.error("Uncaught render error:", error, info.componentStack);
+    this.setState({ componentStack: info.componentStack ?? null });
   }
 
   handleReload = () => {
-    this.setState({ hasError: false });
+    this.setState({ hasError: false, error: null, componentStack: null });
     window.location.assign("/");
   };
 
@@ -46,6 +53,17 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             An unexpected error occurred. Try reloading the page — if it keeps
             happening, come back in a little while.
           </p>
+
+          {/* Dev-only: show the real error so it can be diagnosed. */}
+          {import.meta.env.DEV && this.state.error && (
+            <pre className="max-h-64 max-w-2xl overflow-auto whitespace-pre-wrap rounded-lg bg-dark-3 p-4 text-left text-xs text-red">
+              {this.state.error.message}
+              {this.state.componentStack
+                ? `\n\nComponent stack:${this.state.componentStack}`
+                : ""}
+            </pre>
+          )}
+
           <button
             onClick={this.handleReload}
             className="bg-primary-500 hover:bg-primary-600 mt-2 rounded-lg px-6 py-3 text-light-1 transition"

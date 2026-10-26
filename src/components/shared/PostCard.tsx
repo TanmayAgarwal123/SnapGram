@@ -9,8 +9,8 @@ type PostCardProps = {
 }
 const PostCard = ({ post }: PostCardProps) => {
     const {user} = useUserContext();
-    console.log(post)
-    if(!post.creator) return;
+    // A component must return null to render nothing — never `undefined`.
+    if(!post.creator) return null;
   return (
     <div className="post-card">
         <div className="flex-between">
@@ -51,12 +51,12 @@ const PostCard = ({ post }: PostCardProps) => {
             <div className="small-medium lg:base-medium py-5">
                 <p>{post.caption}</p>
                 <ul className="flex gap-1 mt-2">
-                    {post.tags.map((tag: string) => (
+                    {(post.tags ?? []).map((tag: string) => (
                         <li key={tag} className="text-light-3">
                             #{tag}
                         </li>
                     ))}
-                </ul>    
+                </ul>
             </div>
 
             <img
